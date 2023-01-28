@@ -4,21 +4,18 @@ import './App.css';
 import { useEffect, useRef, useState } from "react";
 
 export default function App() {
-  const [product, setProduct] = useState([]);
+  const [product, setProduct] = useState({});
   const [skipId, setSkipId] = useState(0);
   const ref = useRef(null);
-  const [scrollHeight, setScrollHeight] = useState(0);
-  const apiUrl = "https://dummyjson.com/products?limit=10&skip=1";
+
+
   useEffect(() => {
     handleApiCall(skipId);
-    console.log("window.", window.scrollHeight);
-
     window.addEventListener("scroll", handleScroll);
   }, []);
 
   const handleScroll = (e) => {
     const scrollY = window.innerHeight+window.scrollY;
-    console.log("window.scrollY",scrollY,ref.current.scrollHeight)
     if( scrollY >= ref.current.scrollHeight){
       handleApiCall(skipId+1);
       setSkipId(skipId+1)  
@@ -30,7 +27,7 @@ export default function App() {
     fetch(apiUrl)
       .then((res) => res.json())
       .then((data) => {
-        if(product.length === 0) {
+        if(Object.keys(product).length === 0) {
           setProduct(data)
         }else {
           const newData = {...product};
